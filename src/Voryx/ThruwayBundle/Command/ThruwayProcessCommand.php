@@ -4,6 +4,7 @@
 namespace Voryx\ThruwayBundle\Command;
 
 
+use JuanPescador\Domain\WebSocket\Event\WebSocketServerShutdown;
 use Psr\Log\NullLogger;
 use React\Promise\Deferred;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -126,9 +127,17 @@ class ThruwayProcessCommand extends ContainerAwareCommand
     private function startManager()
     {
         try {
-
             $env  = $this->getContainer()->get('kernel')->getEnvironment();
             $loop = $this->getContainer()->get('voryx.thruway.loop');
+            $pcntl = new \MKraemer\ReactPCNTL\PCNTL($loop);
+            $sendEvent = function () {
+                $event = new WebSocketServerShutdown();
+                $this->getContainer()->get('juan_pescador.infrastructure.event_bus')->handle($event);
+                die();
+            };
+            $pcntl->on(SIGTERM, $sendEvent);
+            $pcntl->on(SIGINT, $sendEvent);
+
 
             $this->processManager = new ProcessManager("process_manager", $loop, $this->getContainer());
             $this->processManager->addTransportProvider(new PawlTransportProvider($this->config['trusted_url']));

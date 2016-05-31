@@ -20,7 +20,6 @@ class TopicStateHandler
      */
     public function onOpen(SessionEvent $event)
     {
-
         /* @var $mapping \Voryx\ThruwayBundle\Mapping\URIClassMapping */
         foreach ($event->getResourceMappings() as $name => $mapping) {
 

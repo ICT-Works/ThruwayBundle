@@ -40,7 +40,6 @@ class ProcessManager extends Client
      */
     public function onSessionStart($session, $transport)
     {
-
         $session->register('add_command', [$this, 'addCommand']);
         $session->register('status', [$this, 'status']);
         $session->register('start_process', [$this, 'startProcess']);
@@ -59,7 +58,6 @@ class ProcessManager extends Client
         });
 
         $congestionManager->start(false);
-
     }
 
 

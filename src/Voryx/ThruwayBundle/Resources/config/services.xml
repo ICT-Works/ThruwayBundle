@@ -49,6 +49,7 @@
 
         <service id="voryx.thruway.server" class="Thruway\Peer\Router">
             <argument type="service" id="voryx.thruway.loop"/>
+            <argument type="service" id="juan_pescador.infrastructure.command_bus"/>
             <call method="addTransportProvider">
                 <argument type="service" id="voryx.thruway.ratchet.transport"/>
             </call>
